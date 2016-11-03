@@ -1,0 +1,10 @@
+{application, cerly,
+  [{description, "Make Curl requests through the Erlang shell, with serialized JSON output."},
+  {vsn, "0.1.0"},
+  {modules, 
+    [cerly, cerly_parser]},
+  {registered, []},
+  {mod, {cerly, []}},
+  {applications,[kernel, stdlib]},
+  {env,[]} %[{DEBUG true}]
+ ]}.
