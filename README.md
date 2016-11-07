@@ -3,7 +3,7 @@ Cerly
 
 An Erlang shell utility to make Curl requests, with serialized JSON output.
 
-GET:
+**GET**:
 
 ```erlang
 1> cerly:cerly("curl -X GET -H \"Accept: application/json\" https://jsonplaceholder.typicode.com/posts/1").
@@ -17,7 +17,7 @@ Note: Recieved Content-Type "application/json" for GET request. This will be sil
        <<"quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit "...>>}]}}
 ```
 
-POST:
+**POST**:
 
 ```erlang
 145> cerly:cerly("curl -X POST -H \"Content-Type: application/json\" -d \"{\"test\":\"test\"}\" https://hookb.in/veD6WrOX").  
