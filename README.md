@@ -8,7 +8,6 @@ An Erlang shell utility to make Curl requests, with serialized JSON output.
 ```erlang
 1> cerly:cerly("curl -X GET -H \"Accept: application/json\" https://jsonplaceholder.typicode.com/posts/1").
 
-Note: Recieved Content-Type "application/json" for GET request. This will be silently ignored.
 {ok,{[{<<"userId">>,1},
       {<<"id">>,1},
       {<<"title">>,
