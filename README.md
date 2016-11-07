@@ -19,7 +19,7 @@ An Erlang shell utility to make Curl requests, with serialized JSON output.
 **POST**:
 
 ```erlang
-145> cerly:cerly("curl -X POST -H \"Content-Type: application/json\" -d \"{\"test\":\"test\"}\" https://hookb.in/veD6WrOX").  
+1> cerly:cerly("curl -X POST -H \"Content-Type: application/json\" -d \"{\"test\":\"test\"}\" https://hookb.in/veD6WrOX").  
 
 {ok,{[{<<"success">>,true}]}}
 ```
