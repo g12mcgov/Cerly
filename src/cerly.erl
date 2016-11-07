@@ -1,17 +1,15 @@
-%%%-------------------------------------------------------------------
-%% @doc cerly public API
-%% @end
-%%%-------------------------------------------------------------------
+% @Author: gmcgovern1271
+% @Date:   2016-10-31 14:58:09
+% @Last Modified by:   Grant McGovern
+% @Last Modified time: 2016-11-06 23:05:04
 
 -module(cerly).
 -behavior(application).
 -include("macros.hrl").
 
 %% Application callbacks
--export([start/2, stop/1]).
--export([cerly/1]).
-%% Application callbacks
--compile([export_all]).
+-export([start/2, stop/1, cerly/1]).
+-compile([{nowarn_unused_function, [{make_request, 3}]}]).
 
 %%====================================================================
 %% Rebar callbacks

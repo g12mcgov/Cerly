@@ -1,7 +1,7 @@
 % @Author: gmcgovern1271
 % @Date:   2016-10-31 14:58:09
 % @Last Modified by:   Grant McGovern
-% @Last Modified time: 2016-11-06 22:45:34
+% @Last Modified time: 2016-11-06 23:06:32
 
 -module(cerly_parser).
 -export([parse_command/1, 
@@ -58,9 +58,10 @@ begins_with_curl(Command) ->
 process_tokens({ok, {Tokens}}) -> Tokens;
 process_tokens({ok, {Tokens, Ignored}}) ->
 	% In this case, we had some unmatched args from the above spec
-	_Transformed = transform_tokens(Tokens),
+	Transformed = transform_tokens(Tokens),
 	Processed = process_ignored(Ignored),
 	#{<<"tokens">> => Tokens,
+	  <<"tokens_transformed">> => Transformed,
 	  <<"url">> => hd(Processed),
 	  <<"data">> => extract_data_body(Tokens),
 	  <<"request">> => extract_request_type(Tokens),
@@ -166,3 +167,4 @@ serialize_json(Body) ->
 %%%
 strip_whitespace(String) ->
 	re:replace(String, "(^\\s+)|(\\s+$)", "", [global,{return,list}]).
+
