@@ -1,7 +1,7 @@
 % @Author: gmcgovern1271
 % @Date:   2016-10-31 14:58:09
 % @Last Modified by:   Grant McGovern
-% @Last Modified time: 2016-11-02 21:53:45
+% @Last Modified time: 2016-11-06 22:45:34
 
 -module(cerly_parser).
 -export([parse_command/1, 
@@ -10,6 +10,9 @@
 		extract_content_type/1]).
 -include("macros.hrl").
 
+%%%
+%% Currently the only curl args supported now.
+%%%
 supported_args() ->
 	[
 		{'progress-bar' 		, $#, 			"progress-bar",		string,		"Displays progress bar"},
@@ -49,7 +52,9 @@ begins_with_curl(Command) ->
 		_ -> false
 	end.
 
+%%%
 %% Validates response from getopt
+%%%
 process_tokens({ok, {Tokens}}) -> Tokens;
 process_tokens({ok, {Tokens, Ignored}}) ->
 	% In this case, we had some unmatched args from the above spec
@@ -96,7 +101,7 @@ extract_content_type(Tokens) ->
 		null -> null;
 		ContentType ->
 			Split = string:tokens(ContentType, ":"),
-			tl(Split) % Get last item (i.e. application/json)
+			strip_whitespace(string:join(tl(Split), "")) % Get last item (i.e. application/json)
 	end.
 
 %%
@@ -114,9 +119,13 @@ extract_request_type(Tokens) ->
 extract_data_body(Tokens) ->
 	case lookup_in_list(data, Tokens) of
 		null -> null;
-		Data -> ?trace(Data)
+		Data -> Data
 	end.
 
+%%%
+%% Some Curl arguments don't take the standard Unix --[arg] [value] format, so
+%% handle anything that isn't picked up in the passed command (such as the URL) 
+%%%
 process_ignored(Ignored) -> process_ignored(Ignored, []).
 process_ignored([], Acc) -> Acc;
 process_ignored([H | [] ], Acc) ->
@@ -130,15 +139,30 @@ process_ignored([H | T], Acc) ->
 		_ -> process_ignored(T, [H | Acc])
 	end.
 
-%%
-% Check if the curl command is to read JSON
-%%
+%%%
+%% Check if the curl command is to read JSON
+%%%
 expects_json("application/json") -> true;
 expects_json(_) -> false.
 
+%%%
+%% Print rather than log
+%%%
 invalid_command(Error) ->
 	io:format("Invalid command: ", Error).
 
-% Serializes a JSON response
-serialize_json(Response) ->
-	jiffy:encode(Response).
+%%%
+%% Serializes a JSON Body response using Jiffy
+%%%
+serialize_json(Body) ->
+	try jiffy:decode(Body) of
+		Output -> {ok, Output}
+	catch
+		exit:Exit -> {error, Exit}
+	end.
+
+%%%
+%% Clean whitespace from string
+%%%
+strip_whitespace(String) ->
+	re:replace(String, "(^\\s+)|(\\s+$)", "", [global,{return,list}]).
